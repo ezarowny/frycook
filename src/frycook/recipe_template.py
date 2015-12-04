@@ -196,7 +196,7 @@ class Recipe(object):
         ensure_git_repo()
     '''
 
-    def bash_preprocessor(source):
+    def bash_preprocessor(self, source):
         source = re.sub(r"\${(.+?)}", r"${'${'}\1${'}'}", source)
         source = re.sub(r"\^\[(.+?)\]", r"${\1}", source)
         return source
