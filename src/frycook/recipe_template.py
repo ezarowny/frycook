@@ -196,6 +196,11 @@ class Recipe(object):
         ensure_git_repo()
     '''
 
+    def bash_preprocessor(source):
+        source = re.sub(r"\${(.+?)}", r"${'${'}\1${'}'}", source)
+        source = re.sub(r"\^\[(.+?)\]", r"${\1}", source)
+        return source
+
     def __init__(self, settings, environment, ok_to_be_rude, no_prompt):
         '''
         Initialize the recipe object with the settings and environment
@@ -211,7 +216,8 @@ class Recipe(object):
         self.ok_to_be_rude = ok_to_be_rude
         self.no_prompt = no_prompt
         self.mylookup = TemplateLookup(
-            directories=[self.settings["package_dir"]])
+            directories=[self.settings["package_dir"]],
+            preprocessor=self.bash_preprocessor)
 
     #######################
     ######## APPLY ########
